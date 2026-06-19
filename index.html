@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Twin Paradox · Relativistic Navigator v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   COSMIC FOUNDATION · v2 — expanded palette, deeper glow stack
+   ============================================================ */
+:root {
+  --c-blue: #00d4ff;
+  --c-cyan: #22d3ee;
+  --c-violet: #a855f7;
+  --c-magenta: #d946ef;
+  --c-pink: #f472b6;
+  --c-gold: #fbbf24;
+  --c-amber: #f59e0b;
+  --c-green: #10b981;
+  --c-red: #f87171;
+  --c-crimson: #ef4444;
+
+  --bg: #02030a;
+  --bg-deep: #000005;
+  --panel: rgba(8, 10, 22, 0.72);
+  --panel-solid: rgba(10, 12, 26, 0.94);
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.14);
+
+  --glow-blue-sm: 0 0 20px rgba(0,212,255,0.35);
+  --glow-blue-lg: 0 0 60px rgba(0,212,255,0.45), 0 0 120px rgba(0,212,255,0.2);
+  --glow-violet-sm: 0 0 20px rgba(168,85,247,0.35);
+  --glow-violet-lg: 0 0 60px rgba(168,85,247,0.45), 0 0 120px rgba(168,85,247,0.2);
+  --glow-magenta: 0 0 40px rgba(217,70,239,0.5);
+  --glow-gold: 0 0 30px rgba(251,191,36,0.5);
+
+  --grad-cosmic: linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #d946ef 100%);
+  --grad-fire: linear-gradient(135deg, #fbbf24 0%, #f87171 50%, #d946ef 100%);
+  --grad-panel: linear-gradient(145deg, rgba(15,18,35,0.85) 0%, rgba(8,10,22,0.75) 100%);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-deep);
+  color: #e2e8f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: crosshair;
+  position: relative;
+}
+
+/* Deep space gradient backdrop — adds dimension behind starfield */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 100% 60% at 20% 10%, rgba(168,85,247,0.08), transparent 60%),
+    radial-gradient(ellipse 120% 80% at 80% 90%, rgba(0,212,255,0.08), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(217,70,239,0.05), transparent 70%),
+    var(--bg-deep);
+  pointer-events: none;
+}
+
+/* ============================================================
+   STARFIELD + NEBULA CANVAS LAYERS
+   ============================================================ */
+#nebula, #starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+#nebula { z-index: 0; opacity: 0.55; }
+#starfield { z-index: 1; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app {
+  position: relative;
+  z-index: 2;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+/* ============================================================
+   HERO · animated cosmic title
+   ============================================================ */
+.hero {
+  text-align: center;
+  padding: 50px 0 36px;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--c-blue);
+  border: 1px solid rgba(0,212,255,0.35);
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: 22px;
+  background: rgba(0,212,255,0.06);
+  backdrop-filter: blur(10px);
+  animation: fadeSlideDown 0.8s ease both, pulseBadge 3s ease-in-out infinite 1s;
+  position: relative;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--c-blue);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--c-blue);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+@keyframes pulseBadge {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.15); }
+  50% { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+}
+
+.hero h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #fff 0%, var(--c-cyan) 30%, var(--c-violet) 65%, var(--c-magenta) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  animation: fadeSlideDown 0.8s 0.1s ease both, gradientShift 8s ease-in-out infinite;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 80px rgba(168,85,247,0.15);
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-sub {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  max-width: 580px;
+  margin: 0 auto 10px;
+  line-height: 1.6;
+  animation: fadeSlideDown 0.8s 0.2s ease both;
+}
+
+.einstein-quote {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: rgba(168,85,247,0.75);
+  margin-top: 12px;
+  animation: fadeSlideDown 0.8s 0.3s ease both;
+}
+
+/* ============================================================
+   PANEL BASE · reusable cosmic card
+   ============================================================ */
+.panel {
+  background: var(--grad-panel);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  position: relative;
+  overflow: hidden;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--c-blue), var(--c-violet), var(--c-magenta), transparent);
+  opacity: 0.8;
+}
+
+/* ============================================================
+   SPEED CONTROL · centerpiece
+   ============================================================ */
+.speed-section {
+  padding: 32px 30px;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.4s ease both;
+}
+
+.speed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.speed-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.speed-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--c-blue);
+  text-shadow: 0 0 30px rgba(0,212,255,0.55);
+  transition: all 0.2s;
+  line-height: 1.1;
+  word-break: break-all;
+}
+
+.speed-unit {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #475569;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.gamma-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(217,70,239,0.08));
+  border: 1px solid rgba(168,85,247,0.3);
+  border-radius: 100px;
+  padding: 8px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--c-violet);
+  box-shadow: 0 0 20px rgba(168,85,247,0.15), inset 0 0 10px rgba(168,85,247,0.05);
+}
+.gamma-badge span { color: white; font-weight: 700; }
+
+/* === WARP TRACK · now logarithmic + variable-precision === */
+.warp-track {
+  position: relative;
+  height: 14px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.06));
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 14px;
+  overflow: visible;
+  cursor: pointer;
+}
+
+.warp-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #0ea5e9 0%, var(--c-blue) 30%, var(--c-violet) 65%, var(--c-magenta) 100%);
+  transition: width 0.15s ease;
+  box-shadow: 0 0 25px rgba(0,212,255,0.5), 0 0 50px rgba(168,85,247,0.3);
+  position: relative;
+}
+.warp-fill::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, #fff 30%, var(--c-blue) 60%, transparent 100%);
+  box-shadow: 0 0 20px var(--c-blue), 0 0 40px var(--c-violet), 0 0 60px var(--c-magenta);
+  border: 2px solid rgba(255,255,255,0.9);
+  animation: warpPulse 2s ease-in-out infinite;
+}
+@keyframes warpPulse {
+  0%,100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.15); }
+}
+
+#vSlider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.warp-markers {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  position: relative;
+}
+.warp-marker {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: #334155;
+  text-align: center;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 4px;
+  border-radius: 6px;
+}
+.warp-marker:hover { color: var(--c-blue); }
+
+/* === LOG/LINEAR MODE TOGGLE === */
+.scale-toggle {
+  display: inline-flex;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 3px;
+  margin-bottom: 12px;
+}
+.scale-toggle button {
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  color: #475569;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+.scale-toggle button.active {
+  background: linear-gradient(135deg, var(--c-blue), var(--c-violet));
+  color: white;
+  box-shadow: 0 0 15px rgba(0,212,255,0.3);
+}
+
+/* === PRESETS · revamped with hover glow === */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.preset-btn {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 10px;
+  color: #94a3b8;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.preset-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(0,212,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.preset-btn:hover::before { opacity: 1; }
+.preset-btn:hover {
+  border-color: rgba(0,212,255,0.4);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,212,255,0.15);
+}
+.preset-btn.active {
+  background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(168,85,247,0.12));
+  border-color: var(--c-blue);
+  color: white;
+  box-shadow: 0 0 25px rgba(0,212,255,0.3), inset 0 0 15px rgba(0,212,255,0.05);
+}
+.preset-name { font-weight: 600; font-size: 0.8rem; position: relative; z-index: 1; }
+.preset-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--c-violet);
+  letter-spacing: 0.5px;
+  position: relative; z-index: 1;
+}
+.preset-btn.active .preset-val { color: var(--c-pink); }
+
+/* === PRECISION INPUT GROUP === */
+.manual-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+@media (max-width: 600px) { .manual-row { grid-template-columns: 1fr; } }
+
+.input-group {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-group:focus-within {
+  border-color: rgba(168,85,247,0.5);
+  box-shadow: 0 0 20px rgba(168,85,247,0.12);
+}
+.input-group label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #475569;
+}
+.input-group input {
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.95rem;
+  outline: none;
+  width: 100%;
+  padding: 2px 0;
+}
+.input-group .input-hint {
+  font-size: 0.6rem;
+  color: #334155;
+  font-family: 'Space Mono', monospace;
+}
+
+/* ============================================================
+   TWIN VISUALIZER · SVG characters
+   ============================================================ */
+.twin-visualizer {
+  padding: 30px;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.5s ease both;
+  position: relative;
+}
+
+.viz-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.twins-stage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+}
+@media (max-width: 640px) {
+  .twins-stage { grid-template-columns: 1fr; }
+  .vs-divider { order: 2; flex-direction: row; justify-content: center; padding: 8px 0; }
+}
+
+.twin-card {
+  text-align: center;
+  padding: 20px 14px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.twin-card.earth { border-color: rgba(0,212,255,0.15); }
+.twin-card.travel { border-color: rgba(168,85,247,0.15); }
+
+.twin-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(0,212,255,0.08), transparent 70%);
+  pointer-events: none;
+}
+.twin-card.travel::before {
+  background: radial-gradient(circle at 50% 0%, rgba(168,85,247,0.08), transparent 70%);
+}
+
+/* SVG CHARACTER WRAPPER */
+.twin-portrait {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 14px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.twin-portrait svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 20px rgba(0,212,255,0.2));
+  transition: filter 0.4s;
+}
+.travel .twin-portrait svg {
+  filter: drop-shadow(0 0 20px rgba(168,85,247,0.25));
+}
+
+/* Aging ring around portrait */
+.age-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  animation: spin 6s linear infinite;
+  pointer-events: none;
+}
+.earth .age-ring {
+  border-top-color: var(--c-blue);
+  border-right-color: rgba(0,212,255,0.3);
+}
+.travel .age-ring {
+  border-top-color: var(--c-violet);
+  border-right-color: rgba(168,85,247,0.3);
+  animation-duration: 3s;
+  animation-direction: reverse;
+}
+
+.age-ring.outer {
+  inset: -16px;
+  border-width: 1px;
+  opacity: 0.5;
+  animation-duration: 12s;
+}
+.earth .age-ring.outer { border-top-color: var(--c-cyan); }
+.travel .age-ring.outer { border-top-color: var(--c-magenta); }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.twin-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+.twin-name.earth-n { color: var(--c-blue); }
+.twin-name.traveler { color: var(--c-violet); }
+
+.twin-age-display {
+  font-family: 'Space Mono', monospace;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+  transition: all 0.3s;
+}
+.earth-age-d { color: var(--c-blue); text-shadow: 0 0 25px rgba(0,212,255,0.5); }
+.traveler-age-d { color: var(--c-violet); text-shadow: 0 0 25px rgba(168,85,247,0.5); }
+
+.twin-label {
+  font-size: 0.65rem;
+  color: #475569;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.twin-status {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 8px;
+  font-style: italic;
+  min-height: 1.4em;
+  transition: all 0.3s;
+}
+
+.age-bar-wrap {
+  height: 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-top: 12px;
+  position: relative;
+}
+.age-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.4s ease;
+  position: relative;
+}
+.age-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2.5s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* VS divider */
+.vs-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+}
+.vs-text {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  color: #334155;
+  letter-spacing: 4px;
+  font-weight: 700;
+}
+.vs-delta {
+  background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(217,70,239,0.08));
+  border: 1px solid rgba(251,191,36,0.3);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--c-gold);
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(251,191,36,0.15);
+}
+
+/* ============================================================
+   MISSION PARAMS
+   ============================================================ */
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.55s ease both;
+}
+@media (max-width: 680px) { .mission-grid { grid-template-columns: 1fr; } }
+
+.mission-panel {
+  padding: 24px;
+}
+
+.mp-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #64748b;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+select, input[type="number"] {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid #1e293b;
+  color: white;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+select:focus, input[type="number"]:focus {
+  border-color: rgba(168,85,247,0.5);
+  box-shadow: 0 0 20px rgba(168,85,247,0.12);
+}
+select option { background: #0a0d1a; }
+
+.dest-info {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: rgba(168,85,247,0.05);
+  border-radius: 10px;
+  border-left: 2px solid var(--c-violet);
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.55;
+}
+
+/* ============================================================
+   TELEMETRY GRID · enhanced cards
+   ============================================================ */
+.telemetry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.6s ease both;
+}
+
+.telem-card {
+  padding: 20px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  cursor: default;
+}
+.telem-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 25px rgba(0,212,255,0.1);
+  border-color: rgba(0,212,255,0.2);
+}
+
+.telem-icon {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(0,212,255,0.4));
+}
+.telem-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 6px;
+  display: block;
+}
+.telem-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: white;
+  display: block;
+  transition: all 0.2s;
+  line-height: 1.15;
+  word-break: break-word;
+}
+.telem-unit {
+  font-size: 0.6rem;
+  color: #334155;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  display: block;
+}
+
+/* ============================================================
+   VERDICT PANEL
+   ============================================================ */
+.verdict-panel {
+  padding: 28px 24px;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.65s ease both;
+}
+
+.verdict-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.08;
+  pointer-events: none;
+  transition: all 0.6s;
+  top: -120px;
+  right: -120px;
+  background: var(--c-violet);
+}
+
+.verdict-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.verdict-title::before, .verdict-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+}
+
+.verdict-text {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #cbd5e1;
+  text-align: center;
+  min-height: 60px;
+  display: block;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.verdict-text strong { color: white; }
+.verdict-text .highlight {
+  color: var(--c-gold);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+}
+.verdict-text .blue { color: var(--c-blue); font-family: 'Space Mono', monospace; }
+.verdict-text .violet { color: var(--c-violet); font-family: 'Space Mono', monospace; }
+
+.alert-bar {
+  margin-top: 18px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: all 0.35s;
+  flex-wrap: wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.alert-normal { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); color: var(--c-green); }
+.alert-warning { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: var(--c-gold); }
+.alert-extreme { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: var(--c-red); }
+.alert-cosmic {
+  background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(217,70,239,0.08));
+  border: 1px solid rgba(168,85,247,0.35);
+  color: var(--c-violet);
+  box-shadow: 0 0 30px rgba(168,85,247,0.15);
+}
+.alert-godmode {
+  background: linear-gradient(135deg, rgba(217,70,239,0.15), rgba(251,191,36,0.1));
+  border: 1px solid rgba(217,70,239,0.5);
+  color: var(--c-magenta);
+  box-shadow: 0 0 40px rgba(217,70,239,0.25);
+  animation: godmodePulse 2.5s ease-in-out infinite;
+}
+@keyframes godmodePulse {
+  0%,100% { box-shadow: 0 0 30px rgba(217,70,239,0.2); }
+  50% { box-shadow: 0 0 60px rgba(217,70,239,0.45); }
+}
+
+/* ============================================================
+   SPACETIME DIAGRAM
+   ============================================================ */
+.diagram-section {
+  padding: 30px;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.7s ease both;
+}
+
+.diagram-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#spacetimeCanvas {
+  width: 100%;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at center, rgba(10,15,30,0.5), rgba(0,0,0,0.4));
+  border: 1px solid rgba(255,255,255,0.05);
+  display: block;
+}
+
+.diagram-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* ============================================================
+   EXPLAINER ACCORDION
+   ============================================================ */
+.explainer {
+  overflow: hidden;
+  margin-bottom: 22px;
+  animation: fadeSlideUp 0.7s 0.75s ease both;
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--border);
+}
+.accordion-item:last-child { border-bottom: none; }
+
+.accordion-header {
+  padding: 20px 26px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+  user-select: none;
+}
+.accordion-header:hover { background: rgba(255,255,255,0.02); }
+
+.accordion-htitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #cbd5e1;
+}
+.acc-icon { font-size: 1.2rem; }
+
+.accordion-arrow {
+  color: #334155;
+  transition: transform 0.3s;
+  font-size: 0.8rem;
+}
+.accordion-item.open .accordion-arrow { transform: rotate(180deg); color: var(--c-blue); }
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+  padding: 0 26px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+.accordion-item.open .accordion-body {
+  max-height: 800px;
+  padding: 0 26px 26px;
+}
+.accordion-body strong { color: #e2e8f0; }
+.accordion-body .formula {
+  font-family: 'Space Mono', monospace;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.88rem;
+  color: var(--c-blue);
+  display: block;
+  text-align: center;
+  box-shadow: inset 0 0 15px rgba(0,212,255,0.05);
+}
+
+/* ============================================================
+   HISTORY LOG
+   ============================================================ */
+.history-section {
+  padding: 30px;
+  animation: fadeSlideUp 0.7s 0.8s ease both;
+}
+
+.history-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clear-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #334155;
+  background: none;
+  border: 1px solid #1e293b;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+.clear-btn:hover { color: var(--c-red); border-color: rgba(248,113,113,0.3); }
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.history-list::-webkit-scrollbar { width: 4px; }
+.history-list::-webkit-scrollbar-track { background: transparent; }
+.history-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+
+.history-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  gap: 12px;
+}
+.history-item:hover {
+  background: rgba(0,212,255,0.04);
+  border-color: rgba(0,212,255,0.2);
+  transform: translateX(3px);
+}
+.history-v { color: var(--c-blue); font-weight: 700; }
+.history-dest { color: #94a3b8; }
+.history-ages { color: var(--c-gold); text-align: right; }
+
+.empty-history {
+  text-align: center;
+  padding: 40px;
+  color: #334155;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+.action-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  animation: fadeSlideUp 0.7s 0.85s ease both;
+}
+
+.action-btn {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--c-blue), var(--c-violet));
+  color: white;
+  box-shadow: 0 4px 25px rgba(0,212,255,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 35px rgba(0,212,255,0.45);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.04);
+  color: #94a3b8;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.07);
+  color: white;
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ============================================================
+   FOOTER · toast
+   ============================================================ */
+.footer {
+  text-align: center;
+  padding: 40px 0 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: #1e293b;
+  letter-spacing: 2px;
+  line-height: 1.8;
+  animation: fadeSlideUp 0.7s 0.9s ease both;
+}
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(16,185,129,0.95);
+  color: white;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  padding: 12px 24px;
+  border-radius: 100px;
+  letter-spacing: 1px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes number-flip {
+  0% { transform: translateY(-10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.num-animate { animation: number-flip 0.3s ease; }
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+@media (max-width: 600px) {
+  .preset-grid { grid-template-columns: 1fr 1fr; }
+  .telemetry { grid-template-columns: 1fr 1fr; }
+  .twin-age-display { font-size: 1.9rem; }
+  .verdict-text { font-size: 0.9rem; line-height: 1.6; }
+  .alert-bar { font-size: 0.72rem; }
+  .speed-value { font-size: 1.4rem; }
+  .speed-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .gamma-badge { font-size: 0.75rem; }
+  .twins-stage { gap: 10px; padding: 10px 0; }
+  .twin-portrait { width: 110px; height: 110px; }
+  .warp-markers { display: none; }
+  .verdict-panel { padding: 20px 16px; }
+  .speed-section { padding: 22px 18px; }
+  .twin-visualizer { padding: 22px 16px; }
+  .app { padding: 14px 12px 60px; }
+  .hero { padding: 30px 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="nebula"></canvas>
+<canvas id="starfield"></canvas>
+
+<div class="app">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-badge">SPECIAL RELATIVITY · EINSTEIN 1905</div>
+    <h1>Quantum Twin Paradox</h1>
+    <p class="hero-sub">One twin stays on Earth. The other rockets through space near the speed of light. When they reunite — reality gets weird.</p>
+    <p class="einstein-quote">"The distinction between past, present and future is only a stubbornly persistent illusion." — Albert Einstein</p>
+  </header>
+
+  <!-- SPEED CONTROL -->
+  <section class="speed-section panel">
+    <div class="speed-header">
+      <div style="min-width:0;flex:1;">
+        <div class="speed-label">Spacecraft Velocity</div>
+        <div class="speed-value" id="speedPct">99.9000000%</div>
+        <div class="speed-unit">OF THE SPEED OF LIGHT</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="gamma-badge">γ = <span id="gammaBadge">22.37</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:0.65rem;color:#334155;margin-top:6px;letter-spacing:1px;">LORENTZ FACTOR</div>
+      </div>
+    </div>
+
+    <!-- Logarithmic warp bar -->
+    <div class="warp-track" id="warpTrack">
+      <div class="warp-fill" id="warpFill" style="width:70%"></div>
+      <input type="range" id="vSlider" min="0" max="1" step="0.000001" value="0.7">
+    </div>
+
+    <div class="warp-markers">
+      <div class="warp-marker" data-mode="v" data-val="0.1">0.1c<br><span style="color:#334155">γ≈1</span></div>
+      <div class="warp-marker" data-mode="v" data-val="0.5">0.5c<br><span style="color:#334155">γ=1.15</span></div>
+      <div class="warp-marker" data-mode="v" data-val="0.866025403784">.866c<br><span style="color:#334155">γ=2</span></div>
+      <div class="warp-marker" data-mode="v" data-val="0.99">0.99c<br><span style="color:#334155">γ=7</span></div>
+      <div class="warp-marker" data-mode="gamma" data-val="100">γ=100<br><span style="color:#334155">cosmic</span></div>
+      <div class="warp-marker" data-mode="gamma" data-val="1e6">γ=10⁶<br><span style="color:#334155">galactic</span></div>
+      <div class="warp-marker" data-mode="gamma" data-val="1e11">γ=10¹¹<br><span style="color:#334155">universe</span></div>
+    </div>
+
+    <!-- Preset speeds -->
+    <div class="preset-grid" id="presetGrid">
+      <button class="preset-btn" data-mode="v" data-val="0.00000001"><span class="preset-name">🌍 ISS Orbit</span><span class="preset-val">7.7 km/s</span></button>
+      <button class="preset-btn" data-mode="v" data-val="0.000067"><span class="preset-name">🛸 Parker Probe</span><span class="preset-val">0.0067% c</span></button>
+      <button class="preset-btn" data-mode="v" data-val="0.1"><span class="preset-name">🚀 Slow Warp</span><span class="preset-val">10% c</span></button>
+      <button class="preset-btn" data-mode="v" data-val="0.5"><span class="preset-name">⚡ Half-Light</span><span class="preset-val">50% c</span></button>
+      <button class="preset-btn" data-mode="v" data-val="0.866025403784"><span class="preset-name">✂️ Double Time</span><span class="preset-val">γ = 2</span></button>
+      <button class="preset-btn active" data-mode="v" data-val="0.999"><span class="preset-name">🌌 Near-Light</span><span class="preset-val">γ ≈ 22</span></button>
+      <button class="preset-btn" data-mode="gamma" data-val="100"><span class="preset-name">💫 Interstellar</span><span class="preset-val">γ = 100</span></button>
+      <button class="preset-btn" data-mode="gamma" data-val="10000"><span class="preset-name">🔥 Core Worlds</span><span class="preset-val">γ = 10,000</span></button>
+      <button class="preset-btn" data-mode="gamma" data-val="1000000"><span class="preset-name">🌠 Andromeda Hop</span><span class="preset-val">γ = 10⁶</span></button>
+      <button class="preset-btn" data-mode="gamma" data-val="10000000000"><span class="preset-name">♾️ Universe Edge</span><span class="preset-val">γ = 10¹⁰</span></button>
+    </div>
+
+    <!-- Precision inputs -->
+    <div class="manual-row">
+      <div class="input-group">
+        <label>Velocity (fraction of c)</label>
+        <input type="text" id="vManual" value="0.999">
+        <span class="input-hint">0 to 0.99999... (capped at float precision)</span>
+      </div>
+      <div class="input-group">
+        <label>γ — Lorentz Factor (recommended for ultra-relativistic)</label>
+        <input type="text" id="gammaManual" value="22.37">
+        <span class="input-hint">Enter huge values: 1e10, 1e15, 1e25 — no precision wall</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWIN VISUALIZER -->
+  <section class="twin-visualizer panel">
+    <div class="viz-title">Temporal Age Comparison</div>
+    <div class="twins-stage">
+      <div class="twin-card earth">
+        <div class="twin-portrait" id="earthPortrait">
+          <div class="age-ring outer"></div>
+          <div class="age-ring"></div>
+          <!-- SVG character injected by JS -->
+        </div>
+        <div class="twin-name earth-n">Earth Twin</div>
+        <div class="twin-age-display earth-age-d" id="earthAgeViz">--</div>
+        <div class="twin-label">years old</div>
+        <div class="twin-status" id="earthStatus">Awaiting mission launch...</div>
+        <div class="age-bar-wrap">
+          <div class="age-bar-fill" id="earthBar" style="width:50%;background:linear-gradient(90deg,#0ea5e9,var(--c-blue));"></div>
+        </div>
+      </div>
+
+      <div class="vs-divider">
+        <div class="vs-text">VS</div>
+        <div class="vs-delta" id="ageDeltaBadge">Δ --</div>
+        <div style="font-size:0.6rem;color:#334155;font-family:'Space Mono',monospace;letter-spacing:1px;margin-top:4px;">YRS DIFF</div>
+      </div>
+
+      <div class="twin-card travel">
+        <div class="twin-portrait" id="travelerPortrait">
+          <div class="age-ring outer"></div>
+          <div class="age-ring"></div>
+        </div>
+        <div class="twin-name traveler">Space Twin</div>
+        <div class="twin-age-display traveler-age-d" id="travelerAgeViz">--</div>
+        <div class="twin-label">years old</div>
+        <div class="twin-status" id="travelerStatus">Ready for launch...</div>
+        <div class="age-bar-wrap">
+          <div class="age-bar-fill" id="travelerBar" style="width:20%;background:linear-gradient(90deg,#7c3aed,var(--c-violet));"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION PARAMS -->
+  <div class="mission-grid">
+    <div class="mission-panel panel">
+      <span class="mp-label">🎯 Mission Destination</span>
+      <select id="destInput">
+        <optgroup label="☀️ Solar System">
+          <option value="0.0000000406">Moon (0.0000000406 ly)</option>
+          <option value="0.0000275">Mars at closest (0.0000275 ly)</option>
+          <option value="0.00158">Pluto (orbit, 0.00158 ly)</option>
+          <option value="0.00186">Heliopause (~117 AU)</option>
+        </optgroup>
+        <optgroup label="⭐ Nearby Stars">
+          <option value="4.24" selected>Proxima Centauri b (4.24 ly)</option>
+          <option value="4.37">Alpha Centauri A/B (4.37 ly)</option>
+          <option value="8.6">Sirius (8.6 ly)</option>
+          <option value="12.06">Tau Ceti (12.06 ly)</option>
+          <option value="40">TRAPPIST-1 system (40 ly)</option>
+          <option value="100">100 Light Years</option>
+          <option value="1000">1,000 Light Years</option>
+        </optgroup>
+        <optgroup label="🌌 Galactic">
+          <option value="26670">Sagittarius A* / Galactic Core (26,670 ly)</option>
+          <option value="50000">Galactic Edge (50,000 ly)</option>
+          <option value="100000">Milky Way Diameter (100,000 ly)</option>
+          <option value="160000">Large Magellanic Cloud (160,000 ly)</option>
+        </optgroup>
+        <optgroup label="🌠 Intergalactic">
+          <option value="2537000">Andromeda Galaxy (2.537M ly)</option>
+          <option value="53000000">M87 / Virgo Cluster (53M ly)</option>
+          <option value="1000000000">Deep Cosmic Web (1B ly)</option>
+          <option value="13400000000">GN-z11 — earliest galaxy (13.4B ly)</option>
+          <option value="46500000000">🏁 Observable Universe Edge (46.5B ly)</option>
+          <option value="93000000000">Full Diameter of Observable Universe (93B ly)</option>
+        </optgroup>
+        <optgroup label="🤯 Hypothetical">
+          <option value="1e15">1 Quadrillion ly (beyond horizon)</option>
+          <option value="1e20">1 Quintillion ly</option>
+        </optgroup>
+      </select>
+      <div class="dest-info" id="destInfo">Round-trip mission to Proxima Centauri — the closest star system to our Sun, home to a potentially habitable exoplanet.</div>
+    </div>
+    <div class="mission-panel panel">
+      <span class="mp-label">🧬 Launch Age (Both Twins)</span>
+      <input type="number" id="ageInput" value="30" min="1" max="999">
+      <div class="dest-info" style="margin-top:10px;">Both twins start at this age. The Earth twin continues aging normally; the space twin experiences time dilation.</div>
+    </div>
+  </div>
+
+  <!-- TELEMETRY -->
+  <div class="telemetry">
+    <div class="telem-card panel">
+      <span class="telem-icon">⏱️</span>
+      <span class="telem-label">Earth Elapsed Time</span>
+      <span class="telem-val" id="tEarth">--</span>
+      <span class="telem-unit">HOME FRAME</span>
+    </div>
+    <div class="telem-card panel">
+      <span class="telem-icon">🧭</span>
+      <span class="telem-label">Traveler Elapsed Time</span>
+      <span class="telem-val" id="tTraveler">--</span>
+      <span class="telem-unit">PROPER TIME</span>
+    </div>
+    <div class="telem-card panel">
+      <span class="telem-icon">📐</span>
+      <span class="telem-label">Lorentz Factor γ</span>
+      <span class="telem-val" id="gammaVal">--</span>
+      <span class="telem-unit">TIME DILATION MULTIPLIER</span>
+    </div>
+    <div class="telem-card panel">
+      <span class="telem-icon">📏</span>
+      <span class="telem-label">Length Contraction</span>
+      <span class="telem-val" id="lengthVal">--</span>
+      <span class="telem-unit">OF REST DISTANCE</span>
+    </div>
+    <div class="telem-card panel">
+      <span class="telem-icon">🏎️</span>
+      <span class="telem-label">Speed (km/s)</span>
+      <span class="telem-val" id="speedKms">--</span>
+      <span class="telem-unit">KILOMETERS / SECOND</span>
+    </div>
+    <div class="telem-card panel">
+      <span class="telem-icon">⚡</span>
+      <span class="telem-label">Age Difference</span>
+      <span class="telem-val" id="ageDiff">--</span>
+      <span class="telem-unit">YEARS YOUNGER</span>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <section class="verdict-panel panel">
+    <div class="verdict-glow" id="verdictGlow"></div>
+    <div class="verdict-title">Mission Analysis</div>
+    <div class="verdict-text" id="finalVerdict">Awaiting telemetry...</div>
+    <div class="alert-bar alert-normal" id="alertBar">
+      <span>🟢</span> <span id="alertText">Select a velocity to begin temporal analysis.</span>
+    </div>
+  </section>
+
+  <!-- SPACETIME DIAGRAM -->
+  <section class="diagram-section panel">
+    <div class="diagram-title">Spacetime Diagram — World Lines</div>
+    <canvas id="spacetimeCanvas" height="320"></canvas>
+    <div class="diagram-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#00d4ff;box-shadow:0 0 8px #00d4ff;"></span>Earth Twin</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a855f7;box-shadow:0 0 8px #a855f7;"></span>Space Twin</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(251,191,36,0.6);"></span>Light Cone</div>
+    </div>
+  </section>
+
+  <!-- EXPLAINER -->
+  <section class="explainer panel">
+    <div class="accordion-item open">
+      <div class="accordion-header">
+        <div class="accordion-htitle"><span class="acc-icon">🧠</span> What IS the Twin Paradox?</div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        The Twin Paradox is one of the most mind-bending consequences of <strong>Einstein's Special Theory of Relativity (1905)</strong>.
+        Imagine two identical twins at age 30. One boards a spaceship and rockets toward a distant star at near-lightspeed. The other stays home on Earth.<br><br>
+        When the space twin returns, they are <strong>biologically younger</strong> than their Earth-bound sibling — despite being born the same day. This isn't science fiction. It's physics. Time itself passes at different rates depending on your velocity.
+        <span class="formula">Δt_traveler = Δt_earth / γ</span>
+        The faster you move through <em>space</em>, the slower you move through <em>time</em>. Space and time trade off — always.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <div class="accordion-htitle"><span class="acc-icon">🔢</span> The Math: Lorentz Factor (γ)</div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        The <strong>Lorentz Factor (γ)</strong> is the engine of time dilation. It tells you how much slower time passes for a moving object compared to a stationary one.
+        <span class="formula">γ = 1 / √(1 − v²/c²)</span>
+        At <strong>v = 0</strong>: γ = 1 (no dilation).<br>
+        At <strong>v = 0.866c</strong>: γ = 2 (traveler ages half as fast).<br>
+        At <strong>v = 0.999c</strong>: γ ≈ 22.37.<br>
+        At <strong>γ = 10,000</strong>: one traveler-year = 10,000 Earth-years.<br>
+        At <strong>γ = 10¹⁰</strong>: the entire observable universe (46.5 billion ly) can be crossed in about 4.65 traveler-years.<br><br>
+        <strong>Why input γ directly?</strong> Floating-point precision breaks down for v extremely close to c. Entering γ sidesteps the precision wall — the math stays stable at any scale.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <div class="accordion-htitle"><span class="acc-icon">🤔</span> "But Isn't Motion Relative?"</div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        Great question — this is the "paradox" part. In Special Relativity, motion is relative. From the space twin's perspective, isn't it the <em>Earth</em> that's moving away? Shouldn't both twins see each other aging slower?<br><br>
+        The resolution: <strong>the space twin is NOT in an inertial frame the whole time.</strong> They must <em>accelerate</em> — to turn around and come back. This acceleration breaks the symmetry. Only the space twin experiences the turnaround event, which creates an asymmetry that resolves the paradox in <strong>General Relativity</strong>.<br><br>
+        The result is <em>unambiguous and real</em>: the space twin is younger. This has been experimentally verified with atomic clocks on aircraft (Hafele-Keating, 1971) and GPS satellites.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <div class="accordion-htitle"><span class="acc-icon">🧪</span> Real-World Proof</div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        Time dilation isn't theoretical — it's experimentally confirmed:<br><br>
+        <strong>• Hafele-Keating (1971):</strong> Atomic clocks flown around the world came back slightly younger than stationary clocks — exactly as relativity predicted.<br><br>
+        <strong>• GPS Satellites:</strong> GPS clocks run at different rates due to velocity (slows) and altitude (speeds up). Without correction, GPS would drift ~11 km/day.<br><br>
+        <strong>• Muon Decay:</strong> Cosmic ray muons should decay in microseconds, but many reach Earth's surface — their "clocks" are time-dilated relative to us.<br><br>
+        <strong>• Particle Accelerators:</strong> Unstable particles at near-c live dramatically longer than stationary ones — routinely verified.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <div class="accordion-htitle"><span class="acc-icon">🚀</span> Could We Ever Do This?</div>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        Theoretically? Yes. Practically? The energy requirements are staggering.<br><br>
+        <strong>Energy cost:</strong> Accelerating 1 kg to γ = 10 requires ~8×10¹⁷ J. To γ = 10¹⁰, kinetic energy ≈ (γ − 1) mc² ≈ 9×10²⁶ J per kg — more than the Sun emits in 2 seconds.<br><br>
+        <strong>But the stunning part:</strong> at γ = 10¹⁰, a human could traverse the entire observable universe (93 billion ly diameter) and age under 10 years biologically. The universe is not inaccessible — it's just expensive.<br><br>
+        <strong>The catch:</strong> When you return, billions of years will have passed on Earth. The Sun will have died. There is no going back to the world you left.
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="history-section panel">
+    <div class="history-title">
+      <span>Mission Log</span>
+      <button class="clear-btn" onclick="clearHistory()">CLEAR LOG</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="empty-history">No missions logged yet. Run a calculation to record it.</div>
+    </div>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="action-row">
+    <button class="action-btn btn-primary" onclick="logMission()">📋 Log This Mission</button>
+    <button class="action-btn btn-secondary" onclick="copyResults()">📋 Copy Results</button>
+    <button class="action-btn btn-secondary" onclick="shareResults()">🔗 Share</button>
+  </div>
+
+  <div class="footer">
+    QUANTUM TWIN PARADOX NAVIGATOR · v2 · SPECIAL RELATIVITY · EINSTEIN 1905<br>
+    LORENTZ-STABLE MATH · γ UP TO 10²⁰ · EDUCATIONAL USE
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================================================================
+   GLOBAL STATE · we store (1 - v/c) as `epsilon` for numerical
+   stability when γ is extreme. Derived v = 1 - epsilon.
+   gamma = 1 / sqrt((1-v)(1+v)) = 1 / sqrt(epsilon * (2 - epsilon))
+   For small epsilon: gamma ≈ 1 / sqrt(2*epsilon)
+   Equivalently: epsilon = 1 / (2 * gamma^2)  when gamma >> 1
+   ================================================================ */
+const state = {
+  epsilon: 1 - 0.999,   // start at v=0.999 -> epsilon = 0.001
+  dist: 4.24,
+  startAge: 30,
+  logMode: true,        // logarithmic warp slider
+  missions: []
+};
+
+/* Convert between epsilon (1-v) and gamma with numerical stability */
+function gammaFromEpsilon(eps) {
+  if (eps <= 0) return Infinity;
+  if (eps >= 1) return 1;
+  return 1 / Math.sqrt(eps * (2 - eps));
+}
+function epsilonFromGamma(gamma) {
+  if (gamma <= 1) return 1;
+  if (!isFinite(gamma)) return 0;
+  // Solve 1/sqrt(eps*(2-eps)) = gamma  ->  eps*(2-eps) = 1/gamma^2
+  // -eps^2 + 2*eps - 1/gamma^2 = 0  ->  eps = 1 - sqrt(1 - 1/gamma^2)
+  // For large gamma, use stable approximation:
+  const invG2 = 1 / (gamma * gamma);
+  if (invG2 < 1e-12) {
+    // Very stable: eps ≈ 1/(2g²) + 1/(8g⁴) + ...
+    return invG2 / 2 + invG2 * invG2 / 8;
+  }
+  return 1 - Math.sqrt(1 - invG2);
+}
+
+function vFromEpsilon(eps) { return Math.max(0, Math.min(1, 1 - eps)); }
+
+/* ================================================================
+   FORMATTING — handles cosmic scales gracefully
+   ================================================================ */
+function formatAge(age) {
+  if (!isFinite(age)) return '∞';
+  if (age >= 1e18) return (age / 1e18).toExponential(2) + 'E';
+  if (age >= 1e15) return (age / 1e15).toFixed(2) + 'Qa';
+  if (age >= 1e12) return (age / 1e12).toFixed(2) + 'T';
+  if (age >= 1e9) return (age / 1e9).toFixed(2) + 'B';
+  if (age >= 1e6) return (age / 1e6).toFixed(2) + 'M';
+  if (age >= 1e4) return Math.floor(age).toLocaleString();
+  if (age < 0.01) return age.toExponential(2);
+  if (age < 1) return age.toFixed(4);
+  return age.toFixed(2);
+}
+
+function formatTime(t) {
+  if (!isFinite(t)) return '∞';
+  if (t >= 1e18) return (t / 1e18).toExponential(2) + ' Eyr';
+  if (t >= 1e15) return (t / 1e15).toFixed(2) + ' Pyr';
+  if (t >= 1e12) return (t / 1e12).toFixed(2) + 'T yr';
+  if (t >= 1e9) return (t / 1e9).toFixed(2) + 'B yr';
+  if (t >= 1e6) return (t / 1e6).toFixed(2) + 'M yr';
+  if (t >= 1e3) return (t / 1e3).toFixed(2) + 'k yr';
+  if (t < 0.0001) return (t * 365.25 * 24 * 3600).toExponential(2) + ' s';
+  if (t < 0.01) return (t * 365.25).toFixed(2) + ' days';
+  if (t < 1) return (t * 12).toFixed(1) + ' months';
+  return t.toFixed(3) + ' yr';
+}
+
+function formatGamma(g) {
+  if (!isFinite(g)) return '∞';
+  if (g >= 1e6) return g.toExponential(3);
+  if (g >= 1000) return g.toFixed(0);
+  if (g >= 10) return g.toFixed(2);
+  return g.toFixed(4);
+}
+
+function formatVelocity(eps) {
+  // "how close to c" — show many decimal places when approaching c
+  const v = vFromEpsilon(eps);
+  if (eps < 1e-20) return '99.999999999999999999+%';
+  if (eps < 1e-10) {
+    // Count leading nines
+    const ninesCount = Math.floor(-Math.log10(eps));
+    let nines = '';
+    for (let i = 0; i < Math.min(ninesCount, 20); i++) nines += '9';
+    return `99.${nines}...%`;
+  }
+  const pct = v * 100;
+  if (pct >= 99.999) return pct.toFixed(9) + '%';
+  if (pct >= 99) return pct.toFixed(6) + '%';
+  if (pct >= 10) return pct.toFixed(4) + '%';
+  return pct.toFixed(6) + '%';
+}
+
+/* ================================================================
+   CHARACTER SVG — procedural, ages with the person
+   ================================================================ */
+/* ================================================================
+   CHARACTER STAGE DECIDER
+   Human lifespan caps at ~100. Beyond that: death → skeleton → dust
+   ================================================================ */
+function getCharacterStage(age) {
+  if (age <= 100) return 'alive';
+  if (age <= 130) return 'deceased';    // recently passed, gray pallor
+  if (age <= 250) return 'skeleton';    // skeletal remains
+  if (age <= 600) return 'decaying';    // cracking, fading skull
+  return 'dust';                         // gone entirely
+}
+
+function makeCharacterSVG(age, hueShift, isEarth) {
+  const a = Math.max(0, age);
+  const stage = getCharacterStage(a);
+  const frameColor = isEarth ? '#00d4ff' : '#a855f7';
+  const glowColor = isEarth ? 'rgba(0,212,255,0.4)' : 'rgba(168,85,247,0.5)';
+  const suitColor = isEarth ? '#0ea5e9' : '#7c3aed';
+  const suitDark = isEarth ? '#0369a1' : '#5b21b6';
+
+  // ============= DUST STAGE — faded scatter of particles =============
+  if (stage === 'dust') {
+    const opacity = Math.max(0.08, 1 - (a - 600) / 2000);
+    const particles = [];
+    for (let i = 0; i < 18; i++) {
+      const px = 30 + Math.random() * 60;
+      const py = 40 + Math.random() * 80;
+      const pr = 0.3 + Math.random() * 1.2;
+      particles.push(`<circle cx="${px}" cy="${py}" r="${pr}" fill="#8b7a6a" opacity="${opacity * (0.3 + Math.random() * 0.4)}"/>`);
+    }
+    return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-dust-${isEarth ? 'e' : 't'}" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${glowColor}" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="${glowColor}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="70" r="58" fill="url(#bg-dust-${isEarth ? 'e' : 't'})"/>
+  ${particles.join('')}
+  <text x="60" y="135" text-anchor="middle" fill="#475569" font-family="Space Mono, monospace" font-size="6" opacity="0.6">dust to dust</text>
+</svg>`;
+  }
+
+  // ============= DECAYING STAGE — cracking skull, dark pits =============
+  if (stage === 'decaying') {
+    const decay = Math.min(1, (a - 250) / 350);
+    const boneColor = `rgb(${140 - decay * 40},${130 - decay * 40},${115 - decay * 40})`;
+    const boneShadow = `rgb(${90 - decay * 30},${82 - decay * 30},${70 - decay * 30})`;
+    const fade = 1 - decay * 0.55;
+    let cracks = '';
+    for (let i = 0; i < Math.floor(4 + decay * 8); i++) {
+      const x1 = 40 + Math.random() * 40, y1 = 48 + Math.random() * 40;
+      const x2 = x1 + (Math.random() - 0.5) * 12;
+      const y2 = y1 + (Math.random() - 0.5) * 12;
+      cracks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1a1510" stroke-width="0.6" opacity="${0.5 + Math.random() * 0.4}"/>`;
+    }
+    return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" opacity="${fade}">
+  <defs>
+    <radialGradient id="bg-dec-${isEarth ? 'e' : 't'}" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${glowColor}" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="${glowColor}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="70" r="58" fill="url(#bg-dec-${isEarth ? 'e' : 't'})"/>
+  <path d="M 28 135 Q 30 120 42 114 L 50 112 Q 60 114 70 112 L 78 114 Q 90 120 92 135 Z" fill="${suitDark}" opacity="0.4"/>
+  <ellipse cx="60" cy="72" rx="23" ry="30" fill="${boneColor}"/>
+  <path d="M 44 92 Q 60 108 76 92 L 74 100 Q 60 106 46 100 Z" fill="${boneColor}"/>
+  <ellipse cx="48" cy="70" rx="5.5" ry="6" fill="#000"/>
+  <ellipse cx="72" cy="70" rx="5.5" ry="6" fill="#000"/>
+  <path d="M 57 78 L 60 88 L 63 78 Z" fill="#0a0a0a"/>
+  <rect x="50" y="90" width="2.5" height="5" fill="${boneShadow}"/>
+  <rect x="54" y="90" width="2.5" height="5" fill="#000" opacity="0.7"/>
+  <rect x="58" y="90" width="2.5" height="5" fill="${boneShadow}"/>
+  <rect x="62" y="90" width="2.5" height="5" fill="${boneShadow}"/>
+  <rect x="66" y="90" width="2.5" height="5" fill="#000" opacity="0.7"/>
+  <rect x="70" y="90" width="2.5" height="5" fill="${boneShadow}"/>
+  ${cracks}
+  <path d="M 50 48 Q 55 58 52 70" stroke="#1a1510" stroke-width="0.7" fill="none" opacity="0.85"/>
+  <path d="M 70 50 Q 68 62 74 72" stroke="#1a1510" stroke-width="0.7" fill="none" opacity="0.85"/>
+  <path d="M 60 44 L 58 56 L 62 62" stroke="#1a1510" stroke-width="0.8" fill="none" opacity="0.9"/>
+</svg>`;
+  }
+
+  // ============= SKELETON STAGE — clean skull =============
+  if (stage === 'skeleton') {
+    const boneColor = '#e8e2d0';
+    const boneShadow = '#b8b0a0';
+    return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-sk-${isEarth ? 'e' : 't'}" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${glowColor}" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="${glowColor}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="70" r="58" fill="url(#bg-sk-${isEarth ? 'e' : 't'})"/>
+  <path d="M 24 135 Q 24 118 36 112 L 48 108 Q 60 114 72 108 L 84 112 Q 96 118 96 135 Z" fill="${suitDark}" opacity="0.65"/>
+  <path d="M 52 108 Q 60 116 68 108" stroke="${frameColor}" stroke-width="1.2" fill="none" opacity="0.5"/>
+  <rect x="56" y="100" width="8" height="3" rx="1" fill="${boneShadow}"/>
+  <rect x="56" y="104" width="8" height="3" rx="1" fill="${boneShadow}"/>
+  <ellipse cx="60" cy="70" rx="24" ry="30" fill="${boneColor}"/>
+  <ellipse cx="54" cy="56" rx="10" ry="8" fill="#ffffff" opacity="0.25"/>
+  <ellipse cx="42" cy="80" rx="5" ry="4" fill="${boneShadow}" opacity="0.5"/>
+  <ellipse cx="78" cy="80" rx="5" ry="4" fill="${boneShadow}" opacity="0.5"/>
+  <path d="M 42 90 Q 60 110 78 90 L 76 98 Q 60 108 44 98 Z" fill="${boneColor}"/>
+  <path d="M 46 96 Q 60 104 74 96" stroke="${boneShadow}" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <ellipse cx="48" cy="70" rx="6" ry="6.5" fill="#000"/>
+  <ellipse cx="72" cy="70" rx="6" ry="6.5" fill="#000"/>
+  <circle cx="48" cy="70" r="0.8" fill="${frameColor}" opacity="0.6"/>
+  <circle cx="72" cy="70" r="0.8" fill="${frameColor}" opacity="0.6"/>
+  <path d="M 56 78 L 60 90 L 64 78 Z" fill="#111"/>
+  <rect x="48" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <rect x="51.5" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <rect x="55" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <rect x="58.5" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <rect x="62" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <rect x="65.5" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <rect x="69" y="90" width="2.4" height="5" fill="${boneColor}"/>
+  <line x1="51.2" y1="90" x2="51.2" y2="95" stroke="${boneShadow}" stroke-width="0.3"/>
+  <line x1="54.7" y1="90" x2="54.7" y2="95" stroke="${boneShadow}" stroke-width="0.3"/>
+  <line x1="58.2" y1="90" x2="58.2" y2="95" stroke="${boneShadow}" stroke-width="0.3"/>
+  <line x1="61.7" y1="90" x2="61.7" y2="95" stroke="${boneShadow}" stroke-width="0.3"/>
+  <line x1="65.2" y1="90" x2="65.2" y2="95" stroke="${boneShadow}" stroke-width="0.3"/>
+  <line x1="68.7" y1="90" x2="68.7" y2="95" stroke="${boneShadow}" stroke-width="0.3"/>
+</svg>`;
+  }
+
+  // ============= DECEASED STAGE — gray pallor, closed eyes =============
+  if (stage === 'deceased') {
+    const deathProgress = (a - 100) / 30;
+    const skinBase = [220, 210, 200];
+    const graySkin = skinBase.map(c => c - deathProgress * 40);
+    const skinRGB = `rgb(${graySkin[0]|0},${graySkin[1]|0},${graySkin[2]|0})`;
+    const skinShadow = `rgb(${graySkin[0]*0.7|0},${graySkin[1]*0.7|0},${graySkin[2]*0.7|0})`;
+    return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-dc-${isEarth ? 'e' : 't'}" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${glowColor}" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="${glowColor}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="suit-dc-${isEarth ? 'e' : 't'}" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${suitColor}" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="${suitDark}" stop-opacity="0.7"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="70" r="58" fill="url(#bg-dc-${isEarth ? 'e' : 't'})"/>
+  <path d="M 20 135 Q 20 118 34 112 L 48 108 Q 60 114 72 108 L 86 112 Q 100 118 100 135 Z" fill="url(#suit-dc-${isEarth ? 'e' : 't'})"/>
+  <rect x="53" y="100" width="14" height="12" fill="${skinShadow}"/>
+  <path d="M 40 48 Q 50 42 60 44 Q 70 42 80 48" stroke="#e8e8e8" stroke-width="1.2" fill="none" opacity="0.6"/>
+  <path d="M 42 46 Q 52 41 60 43 Q 68 41 78 46" stroke="#ddd" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <ellipse cx="60" cy="72" rx="24" ry="31" fill="${skinRGB}"/>
+  <path d="M 60 40 Q 85 44 85 72 Q 85 100 60 104 Z" fill="${skinShadow}" opacity="0.25"/>
+  <ellipse cx="36" cy="72" rx="3" ry="5" fill="${skinShadow}"/>
+  <ellipse cx="84" cy="72" rx="3" ry="5" fill="${skinShadow}"/>
+  <path d="M 41 62 Q 46 60 51 62" stroke="#a0a0a0" stroke-width="1.2" fill="none" opacity="0.5"/>
+  <path d="M 69 62 Q 74 60 79 62" stroke="#a0a0a0" stroke-width="1.2" fill="none" opacity="0.5"/>
+  <path d="M 40 69 Q 45 72 51 69" stroke="#5a4a40" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M 69 69 Q 74 72 80 69" stroke="#5a4a40" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M 58 76 Q 57 84 60 86 Q 63 84 62 76" fill="${skinShadow}" opacity="0.5"/>
+  <path d="M 52 92 Q 60 94 68 92" stroke="#5a3540" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M 42 50 Q 60 47 78 50" stroke="${skinShadow}" stroke-width="0.8" fill="none" opacity="0.7"/>
+  <path d="M 44 55 Q 60 52 76 55" stroke="${skinShadow}" stroke-width="0.7" fill="none" opacity="0.6"/>
+  <path d="M 46 60 Q 60 58 74 60" stroke="${skinShadow}" stroke-width="0.6" fill="none" opacity="0.5"/>
+  <path d="M 46 80 Q 43 88 46 96" stroke="${skinShadow}" stroke-width="0.9" fill="none" opacity="0.8"/>
+  <path d="M 74 80 Q 77 88 74 96" stroke="${skinShadow}" stroke-width="0.9" fill="none" opacity="0.8"/>
+  <path d="M 50 98 Q 48 102 50 105" stroke="${skinShadow}" stroke-width="0.7" fill="none" opacity="0.7"/>
+  <path d="M 70 98 Q 72 102 70 105" stroke="${skinShadow}" stroke-width="0.7" fill="none" opacity="0.7"/>
+</svg>`;
+  }
+
+  // ============= ALIVE STAGE (0-100) — more natural, less funky =============
+
+  // Skin tone — light, warm, identical for both twins
+  const skinBase = [255, 224, 196];
+  const ageDesat = Math.min(1, a / 100) * 0.15;
+  const skin = skinBase.map(c => Math.max(200, c * (1 - ageDesat)));
+  const skinRGB = `rgb(${skin[0]|0},${skin[1]|0},${skin[2]|0})`;
+  const skinShadow = `rgb(${skin[0]*0.88|0},${skin[1]*0.84|0},${skin[2]*0.82|0})`;
+
+  // Simple natural hair color — warm medium brown, graying with age
+  let hairColor, hairShadow;
+  if (a < 13) { hairColor = '#8b6a4a'; hairShadow = '#6a5038'; }
+  else if (a < 45) { hairColor = '#5a4030'; hairShadow = '#3d2a1f'; }
+  else if (a < 70) {
+    const t = (a - 45) / 25;
+    const base = [0x5a, 0x40, 0x30];
+    const gray = [0xc0, 0xbc, 0xb5];
+    const h = base.map((c, i) => c * (1 - t) + gray[i] * t);
+    hairColor = `rgb(${h[0]|0},${h[1]|0},${h[2]|0})`;
+    hairShadow = `rgb(${h[0]*0.78|0},${h[1]*0.78|0},${h[2]*0.78|0})`;
+  } else {
+    hairColor = '#d8d4cc'; hairShadow = '#a8a4a0';
+  }
+
+  const hairTopY = a < 50 ? 44 : (a < 80 ? 46 : 49);
+  const hairSideDrop = a < 50 ? 12 : (a < 80 ? 9 : 6);
+
+  const wrinkle = Math.max(0, Math.min(1, (a - 35) / 55));
+  const faceScale = a > 90 ? 0.96 : 1;
+  const eyeDroop = wrinkle * 1.3;
+
+  // Natural hair — simple, clean, no spikes
+  const hairShape = a < 3
+    ? `<path d="M 52 48 Q 60 42 68 48 Q 66 46 60 45 Q 54 46 52 48 Z" fill="${hairColor}"/>`
+    : a < 13
+      ? `<path d="M 40 52 Q 40 42 60 40 Q 80 42 80 52 Q 80 50 78 ${hairTopY + 2} L 42 ${hairTopY + 2} Q 40 50 40 52 Z" fill="${hairColor}"/>`
+      : `<path d="M 38 ${hairTopY + hairSideDrop}
+                 Q 38 ${hairTopY - 4} 55 ${hairTopY - 6}
+                 Q 60 ${hairTopY - 7} 65 ${hairTopY - 5}
+                 Q 82 ${hairTopY - 2} 82 ${hairTopY + hairSideDrop}
+                 Q 82 ${hairTopY + 2} 80 ${hairTopY + 4}
+                 L 42 ${hairTopY + 4}
+                 Q 38 ${hairTopY + 2} 38 ${hairTopY + hairSideDrop} Z" fill="${hairColor}"/>`;
+  const hairPart = (a >= 13 && a < 80)
+    ? `<path d="M 54 ${hairTopY - 4} Q 55 ${hairTopY + 2} 58 ${hairTopY + 3}" stroke="${hairShadow}" stroke-width="0.6" fill="none" opacity="0.5"/>`
+    : '';
+
+  let wrinklePaths = '';
+  if (wrinkle > 0.1) {
+    const fL = wrinkle;
+    wrinklePaths += `
+      <path d="M 46 52 Q 60 ${50 - fL * 0.5} 74 52" stroke="${skinShadow}" stroke-width="0.7" fill="none" opacity="${fL * 0.65}"/>
+      <path d="M 48 56 Q 60 ${54 - fL * 0.5} 72 56" stroke="${skinShadow}" stroke-width="0.6" fill="none" opacity="${fL * 0.55}"/>
+      <path d="M 38 67 l -2.5 -1.5 M 38 70 l -2.5 0.5" stroke="${skinShadow}" stroke-width="0.6" fill="none" opacity="${fL * 0.8}"/>
+      <path d="M 82 67 l 2.5 -1.5 M 82 70 l 2.5 0.5" stroke="${skinShadow}" stroke-width="0.6" fill="none" opacity="${fL * 0.8}"/>`;
+  }
+  if (wrinkle > 0.4) {
+    wrinklePaths += `
+      <path d="M 48 77 Q 46 83 49 89" stroke="${skinShadow}" stroke-width="0.7" fill="none" opacity="${wrinkle * 0.75}"/>
+      <path d="M 72 77 Q 74 83 71 89" stroke="${skinShadow}" stroke-width="0.7" fill="none" opacity="${wrinkle * 0.75}"/>`;
+  }
+  if (wrinkle > 0.7) {
+    wrinklePaths += `
+      <path d="M 51 93 Q 49 97 51 101" stroke="${skinShadow}" stroke-width="0.5" fill="none" opacity="${wrinkle * 0.7}"/>
+      <path d="M 69 93 Q 71 97 69 101" stroke="${skinShadow}" stroke-width="0.5" fill="none" opacity="${wrinkle * 0.7}"/>`;
+  }
+
+  let glasses = '';
+  if (a >= 60) {
+    const gOp = Math.min(1, (a - 60) / 15);
+    glasses = `
+      <circle cx="45" cy="69" r="7" fill="none" stroke="#3a3a3a" stroke-width="1.3" opacity="${gOp * 0.75}"/>
+      <circle cx="75" cy="69" r="7" fill="none" stroke="#3a3a3a" stroke-width="1.3" opacity="${gOp * 0.75}"/>
+      <line x1="52" y1="69" x2="68" y2="69" stroke="#3a3a3a" stroke-width="1.3" opacity="${gOp * 0.75}"/>`;
+  }
+
+  let mouth;
+  if (a < 3) {
+    mouth = `<ellipse cx="60" cy="89" rx="2.5" ry="1.8" fill="#b85368"/>`;
+  } else if (a < 12) {
+    mouth = `<path d="M 55 87 Q 60 91 65 87" stroke="#a04050" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  } else {
+    mouth = `<path d="M 53 89 Q 60 ${90 + wrinkle * 1.5} 67 89" stroke="#8a3548" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  }
+
+  const eyeR = a < 5 ? 2.8 : 2.2;
+  const pupilR = a < 5 ? 1.5 : 1.15;
+  const eyeCY = 69 + eyeDroop;
+
+  const nose = `<path d="M 58 74 Q 57 82 60 84 Q 63 82 62 74" fill="${skinShadow}" opacity="0.5"/>
+                <ellipse cx="58.5" cy="84" rx="0.8" ry="0.6" fill="${skinShadow}" opacity="0.6"/>
+                <ellipse cx="61.5" cy="84" rx="0.8" ry="0.6" fill="${skinShadow}" opacity="0.6"/>`;
+
+  return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg-${isEarth ? 'e' : 't'}" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${glowColor}" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="${glowColor}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="suit-${isEarth ? 'e' : 't'}" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${suitColor}"/>
+      <stop offset="100%" stop-color="${suitDark}"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="60" cy="70" r="58" fill="url(#bg-${isEarth ? 'e' : 't'})"/>
+
+  <path d="M 20 135 Q 20 118 34 112 L 48 108 Q 60 114 72 108 L 86 112 Q 100 118 100 135 Z" fill="url(#suit-${isEarth ? 'e' : 't'})"/>
+  <path d="M 52 108 Q 60 116 68 108" stroke="${frameColor}" stroke-width="1.2" fill="none" opacity="0.7"/>
+  <circle cx="60" cy="120" r="2" fill="${frameColor}" opacity="0.9"/>
+
+  <rect x="53" y="100" width="14" height="12" fill="${skinShadow}"/>
+
+  <g transform="translate(60, 72) scale(${faceScale}) translate(-60, -72)">
+    <ellipse cx="60" cy="72" rx="25" ry="32" fill="${skinRGB}"/>
+    <path d="M 60 40 Q 85 44 85 72 Q 85 100 60 104 Z" fill="${skinShadow}" opacity="0.15"/>
+
+    ${hairShape}
+    ${hairPart}
+
+    <ellipse cx="36" cy="72" rx="3" ry="5" fill="${skinShadow}"/>
+    <ellipse cx="84" cy="72" rx="3" ry="5" fill="${skinShadow}"/>
+
+    <path d="M 40 63 Q 46 ${61 + wrinkle * 0.8} 52 63" stroke="${hairShadow}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M 68 63 Q 74 ${61 + wrinkle * 0.8} 80 63" stroke="${hairShadow}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+    <ellipse cx="45" cy="${eyeCY}" rx="${eyeR + 0.5}" ry="${eyeR}" fill="#ffffff"/>
+    <ellipse cx="75" cy="${eyeCY}" rx="${eyeR + 0.5}" ry="${eyeR}" fill="#ffffff"/>
+    <circle cx="45" cy="${eyeCY}" r="${pupilR + 0.5}" fill="#5c3a1e"/>
+    <circle cx="75" cy="${eyeCY}" r="${pupilR + 0.5}" fill="#5c3a1e"/>
+    <circle cx="45" cy="${eyeCY}" r="${pupilR}" fill="#1a0e05"/>
+    <circle cx="75" cy="${eyeCY}" r="${pupilR}" fill="#1a0e05"/>
+    <circle cx="46" cy="${eyeCY - 0.5}" r="0.6" fill="#ffffff"/>
+    <circle cx="76" cy="${eyeCY - 0.5}" r="0.6" fill="#ffffff"/>
+
+    ${nose}
+    ${mouth}
+    ${glasses}
+    ${wrinklePaths}
+  </g>
+</svg>`;
+}
+
+function updateCharacters(earthAge, travelerAge) {
+  document.getElementById('earthPortrait').innerHTML = `
+    <div class="age-ring outer"></div>
+    <div class="age-ring"></div>
+    ${makeCharacterSVG(earthAge, 0, true)}`;
+  document.getElementById('travelerPortrait').innerHTML = `
+    <div class="age-ring outer"></div>
+    <div class="age-ring"></div>
+    ${makeCharacterSVG(travelerAge, 0, false)}`;
+}
+
+function getLifeStatus(age) {
+  if (age < 1) return 'Newborn';
+  if (age < 4) return 'Toddler';
+  if (age < 12) return 'Child';
+  if (age < 20) return 'Teen';
+  if (age < 35) return 'Young adult';
+  if (age < 55) return 'Middle-aged';
+  if (age < 70) return 'Senior';
+  if (age < 85) return 'Elder';
+  if (age <= 100) return 'Venerable';
+  if (age <= 130) return '💀 Deceased';
+  if (age <= 250) return '☠️ Skeletal remains';
+  if (age <= 600) return '🪦 Decaying';
+  if (age < 1e6) return '🌫️ Dust — millennia passed';
+  if (age < 1e9) return '🌫️ Dust — cosmic timescale';
+  return '🌫️ Dust — stellar epoch';
+}
+
+/* ================================================================
+   STARFIELD + NEBULA
+   ================================================================ */
+const sf = document.getElementById('starfield');
+const sfx = sf.getContext('2d');
+const neb = document.getElementById('nebula');
+const nbx = neb.getContext('2d');
+let stars = [], W, H, nebulaBlobs = [];
+
+function initStars() {
+  W = sf.width = neb.width = window.innerWidth;
+  H = sf.height = neb.height = window.innerHeight;
+  stars = [];
+  const count = Math.min(400, Math.floor((W * H) / 4800));
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.6 + 0.2,
+      a: Math.random(),
+      s: Math.random() * 0.003 + 0.001,
+      drift: (Math.random() - 0.5) * 0.015,
+      tint: Math.random()  // for color variation
+    });
+  }
+  // Nebula blobs — drawn once, static background
+  nebulaBlobs = [];
+  for (let i = 0; i < 8; i++) {
+    nebulaBlobs.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 240 + 180,
+      hue: Math.random() < 0.5 ? [168, 85, 247] : [0, 212, 255],
+      alpha: 0.05 + Math.random() * 0.08
+    });
+  }
+  drawNebula();
+}
+
+function drawNebula() {
+  nbx.clearRect(0, 0, W, H);
+  nebulaBlobs.forEach(b => {
+    const grad = nbx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+    grad.addColorStop(0, `rgba(${b.hue[0]},${b.hue[1]},${b.hue[2]},${b.alpha})`);
+    grad.addColorStop(0.5, `rgba(${b.hue[0]},${b.hue[1]},${b.hue[2]},${b.alpha * 0.4})`);
+    grad.addColorStop(1, `rgba(${b.hue[0]},${b.hue[1]},${b.hue[2]},0)`);
+    nbx.fillStyle = grad;
+    nbx.beginPath();
+    nbx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    nbx.fill();
+  });
+}
+
+let animVel = 0;  // animated version of velocity for smooth warp
+function animateStars() {
+  // vBase used for warp effect intensity: maps gamma logarithmically so
+  // the starfield keeps warping even deep in the ultra-relativistic regime
+  const gamma = gammaFromEpsilon(state.epsilon);
+  // Map gamma → 0..1 warp factor
+  let target;
+  if (gamma <= 1) target = 0;
+  else target = Math.min(0.99, Math.log10(gamma) / 12); // reaches 0.99 at γ ≈ 10^12
+  animVel += (target - animVel) * 0.08;
+  const warp = animVel;
+
+  sfx.clearRect(0, 0, W, H);
+  const speed = Math.pow(warp, 3) * 8;
+
+  stars.forEach(star => {
+    star.a += star.s;
+    if (star.a > 1) star.a = 0;
+    star.x += star.drift * (1 + speed * 4);
+    if (star.x > W) star.x = 0;
+    if (star.x < 0) star.x = W;
+
+    const twinkle = Math.sin(star.a * Math.PI * 2) * 0.4 + 0.6;
+    const alpha = twinkle * (0.3 + warp * 0.5);
+
+    if (speed > 0.15) {
+      const len = speed * 18 * star.r;
+      const grad = sfx.createLinearGradient(star.x - len, star.y, star.x + 2, star.y);
+      grad.addColorStop(0, 'transparent');
+      const r = 150 + warp * 105;
+      const g = 200;
+      const b = 255;
+      grad.addColorStop(0.7, `rgba(${r|0},${g|0},${b|0},${alpha * 0.6})`);
+      grad.addColorStop(1, `rgba(${r|0},${g|0},${b|0},${alpha})`);
+      sfx.strokeStyle = grad;
+      sfx.lineWidth = star.r * 0.7;
+      sfx.beginPath();
+      sfx.moveTo(star.x - len, star.y);
+      sfx.lineTo(star.x, star.y);
+      sfx.stroke();
+    } else {
+      sfx.beginPath();
+      sfx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      // Slight color variation
+      const r = star.tint > 0.7 ? 255 : (star.tint > 0.4 ? 220 : 180);
+      sfx.fillStyle = `rgba(${r},${220},255,${alpha})`;
+      sfx.fill();
+    }
+  });
+  requestAnimationFrame(animateStars);
+}
+
+window.addEventListener('resize', () => {
+  initStars();
+  update();
+});
+initStars();
+animateStars();
+
+/* ================================================================
+   SPACETIME DIAGRAM
+   ================================================================ */
+const stCanvas = document.getElementById('spacetimeCanvas');
+const stCtx = stCanvas.getContext('2d');
+
+function drawSpacetime(eps, gamma) {
+  const w = stCanvas.offsetWidth;
+  stCanvas.width = w;
+  stCanvas.height = 320;
+  const h = 320;
+  stCtx.clearRect(0, 0, w, h);
+
+  const cx = w / 2;
+  const margin = 44;
+  const plotW = w - margin * 2;
+  const plotH = h - 70;
+  const ox = margin;
+  const oy = h - 34;
+
+  // Grid
+  stCtx.strokeStyle = 'rgba(255,255,255,0.035)';
+  stCtx.lineWidth = 1;
+  for (let i = 0; i <= 12; i++) {
+    const x = ox + (i / 12) * plotW;
+    stCtx.beginPath(); stCtx.moveTo(x, oy); stCtx.lineTo(x, oy - plotH); stCtx.stroke();
+  }
+  for (let j = 0; j <= 10; j++) {
+    const y = oy - (j / 10) * plotH;
+    stCtx.beginPath(); stCtx.moveTo(ox, y); stCtx.lineTo(ox + plotW, y); stCtx.stroke();
+  }
+
+  // Light cone (slope = c, i.e. 45°)
+  stCtx.strokeStyle = 'rgba(251,191,36,0.25)';
+  stCtx.lineWidth = 1.2;
+  stCtx.setLineDash([5, 5]);
+  // Forward light cone from origin
+  stCtx.beginPath(); stCtx.moveTo(cx, oy); stCtx.lineTo(ox + plotW, oy - plotH); stCtx.stroke();
+  stCtx.beginPath(); stCtx.moveTo(cx, oy); stCtx.lineTo(ox, oy - plotH); stCtx.stroke();
+  stCtx.setLineDash([]);
+
+  // Fill light cone region very subtly
+  const coneGrad = stCtx.createLinearGradient(cx, oy, cx, oy - plotH);
+  coneGrad.addColorStop(0, 'rgba(251,191,36,0.06)');
+  coneGrad.addColorStop(1, 'rgba(251,191,36,0)');
+  stCtx.fillStyle = coneGrad;
+  stCtx.beginPath();
+  stCtx.moveTo(cx, oy);
+  stCtx.lineTo(ox + plotW, oy - plotH);
+  stCtx.lineTo(ox, oy - plotH);
+  stCtx.closePath();
+  stCtx.fill();
+
+  // Axes
+  stCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+  stCtx.lineWidth = 1.5;
+  stCtx.beginPath(); stCtx.moveTo(ox, oy); stCtx.lineTo(ox + plotW, oy); stCtx.stroke();
+  stCtx.beginPath(); stCtx.moveTo(cx, oy); stCtx.lineTo(cx, oy - plotH); stCtx.stroke();
+
+  // Labels
+  stCtx.fillStyle = '#64748b';
+  stCtx.font = '11px "Space Mono", monospace';
+  stCtx.textAlign = 'right';
+  stCtx.fillText('t (time →)', ox - 6, oy - plotH + 14);
+  stCtx.textAlign = 'center';
+  stCtx.fillText('x (space →)', ox + plotW, oy + 20);
+  stCtx.fillText('EARTH', cx, oy + 20);
+
+  // Earth twin world line — vertical, clamped animation glow
+  const earthGrad = stCtx.createLinearGradient(cx, oy, cx, oy - plotH);
+  earthGrad.addColorStop(0, '#0ea5e9');
+  earthGrad.addColorStop(1, '#00d4ff');
+  stCtx.strokeStyle = earthGrad;
+  stCtx.lineWidth = 3;
+  stCtx.shadowColor = '#00d4ff';
+  stCtx.shadowBlur = 12;
+  stCtx.beginPath();
+  stCtx.moveTo(cx, oy);
+  stCtx.lineTo(cx, oy - plotH);
+  stCtx.stroke();
+  stCtx.shadowBlur = 0;
+
+  // Space twin world line — V-shape (out & back)
+  // v determines slope from the axis. slope = dx/dt = v. Since axis goes up (t axis)
+  // with slope representing velocity from the origin, at v close to c the V is
+  // nearly touching the light cone.
+  // Plot: on canvas, t increases upward; x increases right. For the outbound leg,
+  // x = v*t at slope v. At the apex (turnaround), t_half corresponds to destination.
+  // To keep the V symmetric inside the plot regardless of v, we render it so
+  // apex is at the top and legs open downward to the origin / return point.
+  const v = vFromEpsilon(eps);
+  // angle between traveler line and t-axis = atan(v)
+  // pixel slope: dx_px / dy_px = v * (plotW / 2) / plotH  — we scale so v=1 touches edges
+  // Make the apex at top center; feet at (cx - footOffset, oy) and (cx + footOffset, oy)
+  const apexY = oy - plotH + 10;
+  const footOffset = v * (plotW / 2 - 4);
+
+  // Outbound leg
+  stCtx.strokeStyle = '#a855f7';
+  stCtx.lineWidth = 3;
+  stCtx.shadowColor = '#a855f7';
+  stCtx.shadowBlur = 14;
+  stCtx.beginPath();
+  stCtx.moveTo(cx, oy);
+  stCtx.lineTo(cx + footOffset, apexY);
+  stCtx.stroke();
+  // Return leg
+  stCtx.beginPath();
+  stCtx.moveTo(cx + footOffset, apexY);
+  stCtx.lineTo(cx, oy - 2);
+  stCtx.stroke();
+  stCtx.shadowBlur = 0;
+
+  // Turnaround event dot
+  stCtx.fillStyle = '#f472b6';
+  stCtx.shadowColor = '#f472b6';
+  stCtx.shadowBlur = 14;
+  stCtx.beginPath();
+  stCtx.arc(cx + footOffset, apexY, 5, 0, Math.PI * 2);
+  stCtx.fill();
+  stCtx.shadowBlur = 0;
+
+  // Event labels
+  stCtx.fillStyle = '#f472b6';
+  stCtx.font = 'bold 10px "Space Mono", monospace';
+  stCtx.textAlign = 'left';
+  stCtx.fillText('Turnaround', cx + footOffset + 8, apexY + 4);
+
+  stCtx.fillStyle = '#00d4ff';
+  stCtx.textAlign = 'center';
+  stCtx.fillText('START/REUNION', cx, oy - 6);
+
+  // Gamma annotation
+  stCtx.fillStyle = 'rgba(168,85,247,0.9)';
+  stCtx.font = 'bold 12px "Space Mono", monospace';
+  stCtx.textAlign = 'left';
+  stCtx.fillText(`γ = ${formatGamma(gamma)}`, ox + 8, oy - plotH + 18);
+  stCtx.fillStyle = 'rgba(0,212,255,0.9)';
+  stCtx.fillText(`v = ${(v * 100).toFixed(v > 0.999 ? 6 : 3)}% c`, ox + 8, oy - plotH + 36);
+
+  // Explanatory caption at bottom-left
+  stCtx.fillStyle = '#334155';
+  stCtx.font = '10px "Space Mono", monospace';
+  stCtx.fillText('Closer to light cone = closer to c', ox + 8, oy - 10);
+}
+
+/* ================================================================
+   DESTINATION METADATA
+   ================================================================ */
+const destMeta = {
+  '0.0000000406': 'The Moon — about 384,400 km away. Light from Earth reaches it in 1.3 seconds.',
+  '0.0000275': 'Mars at closest approach. Even with current rockets, a round trip takes ~18 months — but at near-c, you are there and back in moments.',
+  '0.00158': 'Pluto, at the edge of the Kuiper Belt. New Horizons took 9.5 years to reach it in 2015.',
+  '0.00186': 'The heliopause, where the Sun\'s solar wind yields to interstellar space. Voyager 1 crossed it in 2012.',
+  '4.24': 'Proxima Centauri b — the closest known potentially habitable exoplanet. A world in the habitable zone of the nearest star to our Sun.',
+  '4.37': 'Alpha Centauri — our closest stellar neighbor, a triple-star system visible from the southern hemisphere.',
+  '8.6': 'Sirius, the brightest star in Earth\'s night sky. A binary system with a white dwarf companion.',
+  '12.06': 'Tau Ceti — a Sun-like star with at least four confirmed planets, including two in the habitable zone.',
+  '40': 'TRAPPIST-1 system — seven Earth-sized planets around an ultra-cool dwarf star, multiple in the habitable zone.',
+  '100': 'Roughly the distance to nearby stars with confirmed exoplanets in the "Local Bubble" of interstellar space.',
+  '1000': 'Reaching into the Orion Arm of the Milky Way — distant but still within our galactic neighborhood.',
+  '26670': 'Sagittarius A* — the supermassive black hole at the center of our galaxy, 4.1 million solar masses.',
+  '50000': 'The edge of the Milky Way\'s luminous disk.',
+  '100000': 'The full diameter of the Milky Way galaxy.',
+  '160000': 'The Large Magellanic Cloud — a satellite galaxy of the Milky Way, site of Supernova 1987A.',
+  '2537000': 'The Andromeda Galaxy — our galactic neighbor, currently on a 4-billion-year collision course with us.',
+  '53000000': 'M87 — giant elliptical galaxy at the heart of the Virgo Cluster, home to the first black hole ever photographed (2019).',
+  '1000000000': 'Deep into the cosmic web — a filamentary structure of galaxies that spans the universe.',
+  '13400000000': 'GN-z11 — one of the most distant galaxies ever observed, seen as it was only 400 million years after the Big Bang.',
+  '46500000000': 'The edge of the observable universe — the cosmic horizon, the furthest light has had time to reach us in 13.8 billion years.',
+  '93000000000': 'The full diameter of the observable universe. Beyond this, space expands faster than light relative to us — forever out of reach.',
+  '1e15': 'Hypothetical distance — one quadrillion light-years. Far beyond the observable universe, into speculative cosmology.',
+  '1e20': 'Hypothetical distance for ultra-γ demonstrations. The math still holds at any scale.'
+};
+
+/* ================================================================
+   HISTORY
+   ================================================================ */
+const HIST_KEY = 'twin-paradox-history-v2';
+
+async function loadHistory() {
+  try {
+    const res = await window.storage.get(HIST_KEY);
+    if (res && res.value) state.missions = JSON.parse(res.value);
+  } catch (e) {
+    // key doesn't exist — normal
+    state.missions = [];
+  }
+  renderHistory();
+}
+
+async function saveHistory() {
+  try {
+    await window.storage.set(HIST_KEY, JSON.stringify(state.missions.slice(0, 50)));
+  } catch (e) {
+    console.warn('Storage unavailable:', e);
+  }
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!state.missions.length) {
+    list.innerHTML = '<div class="empty-history">No missions logged yet. Run a calculation to record it.</div>';
+    return;
+  }
+  list.innerHTML = state.missions.map((m, i) => `
+    <div class="history-item" onclick="replayMission(${i})">
+      <span class="history-v">γ=${m.gammaDisplay}</span>
+      <span class="history-dest">${m.destName}</span>
+      <span class="history-ages">${m.earthAge}→${m.travAge} (Δ${m.delta})</span>
+    </div>
+  `).join('');
+}
+
+function logMission() {
+  const gamma = gammaFromEpsilon(state.epsilon);
+  const destSelect = document.getElementById('destInput');
+  const destName = destSelect.options[destSelect.selectedIndex].text.split('(')[0].trim();
+  const tEarth = (state.dist / vFromEpsilon(state.epsilon)) * 2;
+  const tTrav = tEarth / gamma;
+  const earthAge = state.startAge + tEarth;
+  const travAge = state.startAge + tTrav;
+  const delta = earthAge - travAge;
+  state.missions.unshift({
+    epsilon: state.epsilon,
+    gammaDisplay: formatGamma(gamma),
+    destName,
+    dist: state.dist,
+    earthAge: formatAge(earthAge),
+    travAge: formatAge(travAge),
+    delta: formatAge(delta),
+    startAge: state.startAge,
+    timestamp: Date.now()
+  });
+  state.missions = state.missions.slice(0, 50);
+  saveHistory();
+  renderHistory();
+  toast('Mission logged ✓');
+}
+
+function clearHistory() {
+  if (!state.missions.length) return;
+  state.missions = [];
+  saveHistory();
+  renderHistory();
+  toast('Log cleared');
+}
+
+function replayMission(i) {
+  const m = state.missions[i];
+  if (!m) return;
+  state.epsilon = m.epsilon;
+  state.dist = m.dist;
+  state.startAge = m.startAge;
+  // Find matching dest in dropdown
+  const sel = document.getElementById('destInput');
+  for (let j = 0; j < sel.options.length; j++) {
+    if (parseFloat(sel.options[j].value) === m.dist) { sel.selectedIndex = j; break; }
+  }
+  document.getElementById('ageInput').value = m.startAge;
+  syncInputsFromState();
+  update();
+  toast('Mission restored');
+}
+
+/* ================================================================
+   SHARE / COPY
+   ================================================================ */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function copyResults() {
+  const gamma = gammaFromEpsilon(state.epsilon);
+  const v = vFromEpsilon(state.epsilon);
+  const tEarth = (state.dist / v) * 2;
+  const tTrav = tEarth / gamma;
+  const earthAge = state.startAge + tEarth;
+  const travAge = state.startAge + tTrav;
+  const destSelect = document.getElementById('destInput');
+  const destName = destSelect.options[destSelect.selectedIndex].text;
+
+  const summary = `🚀 QUANTUM TWIN PARADOX MISSION REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Destination:  ${destName}
+Velocity:     ${formatVelocity(state.epsilon)} c
+Lorentz γ:    ${formatGamma(gamma)}
+Start age:    ${state.startAge} years (both twins)
+─────────────────────────────
+Earth time:   ${formatTime(tEarth)}
+Traveler:     ${formatTime(tTrav)}
+─────────────────────────────
+Earth twin:   ${formatAge(earthAge)} yrs old
+Space twin:   ${formatAge(travAge)} yrs old
+Difference:   ${formatAge(earthAge - travAge)} years younger
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Einstein was right. Again.`;
+
+  navigator.clipboard?.writeText(summary).then(() => toast('Results copied to clipboard ✓'))
+    .catch(() => toast('Copy failed'));
+}
+
+function shareResults() {
+  const gamma = gammaFromEpsilon(state.epsilon);
+  const text = `I just traveled at γ=${formatGamma(gamma)} in the Quantum Twin Paradox Navigator — my space twin aged only ${formatTime((state.dist / vFromEpsilon(state.epsilon)) * 2 / gamma)} while Earth aged ${formatTime((state.dist / vFromEpsilon(state.epsilon)) * 2)}! 🚀⏱️`;
+  if (navigator.share) {
+    navigator.share({ title: 'Quantum Twin Paradox', text }).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(text).then(() => toast('Share text copied ✓'));
+  }
+}
+
+/* ================================================================
+   INPUT SYNC · the hub of it all
+   ================================================================ */
+function syncInputsFromState() {
+  const gamma = gammaFromEpsilon(state.epsilon);
+  const v = vFromEpsilon(state.epsilon);
+
+  // Velocity input — show up to 15 sig figs, then "precision cap" message
+  const vEl = document.getElementById('vManual');
+  if (document.activeElement !== vEl) {
+    if (state.epsilon < 1e-15) {
+      vEl.value = '0.999999999999999+';
+    } else {
+      vEl.value = v.toPrecision(15);
+    }
+  }
+
+  // Gamma input
+  const gEl = document.getElementById('gammaManual');
+  if (document.activeElement !== gEl) {
+    gEl.value = formatGamma(gamma);
+  }
+
+  // Warp slider (logarithmic, 0..1 maps to log10(gamma) in [0, 12])
+  const sl = document.getElementById('vSlider');
+  if (document.activeElement !== sl) {
+    let sliderPos;
+    if (state.logMode) {
+      // Map: gamma=1 → 0; gamma=10^12 → 1 (visually covers full range)
+      const logG = Math.log10(Math.max(1, gamma));
+      sliderPos = Math.min(1, logG / 12);
+    } else {
+      sliderPos = v;
+    }
+    sl.value = sliderPos.toFixed(6);
+  }
+
+  // Fill bar: also logarithmic so you see motion at extreme γ
+  const logG = Math.log10(Math.max(1, gamma));
+  const fillPct = Math.min(100, Math.max(0.5, (logG / 12) * 100));
+  // blend with raw velocity percentage so slow speeds still show some fill
+  const rawPct = v * 100;
+  const blended = Math.max(rawPct, fillPct);
+  document.getElementById('warpFill').style.width = blended + '%';
+}
+
+/* ================================================================
+   MAIN UPDATE
+   ================================================================ */
+function update() {
+  const eps = state.epsilon;
+  const v = vFromEpsilon(eps);
+  const gamma = gammaFromEpsilon(eps);
+  const dist = state.dist;
+  const startAge = state.startAge;
+
+  // Core relativity
+  let tEarth, tTrav;
+  if (v <= 0) {
+    tEarth = Infinity;
+    tTrav = Infinity;
+  } else {
+    tEarth = (dist / v) * 2;  // round trip at constant v
+    tTrav = tEarth / gamma;    // proper time
+  }
+  const earthFinalAge = startAge + tEarth;
+  const travelerFinalAge = startAge + tTrav;
+  const ageDiff = earthFinalAge - travelerFinalAge;
+  const lengthContract = 1 / gamma;
+
+  // --- Display: speed ---
+  document.getElementById('speedPct').textContent = formatVelocity(eps);
+  document.getElementById('gammaBadge').textContent = formatGamma(gamma);
+
+  syncInputsFromState();
+
+  // --- Twin visualizer ---
+  const maxAge = Math.max(earthFinalAge, travelerFinalAge, 1);
+  const eBar = Math.min(100, (earthFinalAge / maxAge) * 100);
+  const tBar = Math.min(100, (travelerFinalAge / maxAge) * 100);
+  document.getElementById('earthBar').style.width = eBar + '%';
+  document.getElementById('travelerBar').style.width = tBar + '%';
+
+  const earthViz = document.getElementById('earthAgeViz');
+  const travViz = document.getElementById('travelerAgeViz');
+  earthViz.classList.remove('num-animate'); travViz.classList.remove('num-animate');
+  void earthViz.offsetWidth; void travViz.offsetWidth;
+  earthViz.classList.add('num-animate'); travViz.classList.add('num-animate');
+
+  earthViz.textContent = formatAge(earthFinalAge);
+  travViz.textContent = formatAge(travelerFinalAge);
+
+  // SVG characters — pass full age so death/decay stages can render
+  updateCharacters(earthFinalAge, travelerFinalAge);
+
+  document.getElementById('earthStatus').textContent = getLifeStatus(earthFinalAge);
+  document.getElementById('travelerStatus').textContent = getLifeStatus(travelerFinalAge);
+
+  // Delta badge
+  let dText;
+  if (ageDiff >= 1e12) dText = (ageDiff / 1e12).toFixed(2) + 'T';
+  else if (ageDiff >= 1e9) dText = (ageDiff / 1e9).toFixed(2) + 'B';
+  else if (ageDiff >= 1e6) dText = (ageDiff / 1e6).toFixed(2) + 'M';
+  else if (ageDiff >= 1e3) dText = (ageDiff / 1e3).toFixed(1) + 'k';
+  else dText = ageDiff.toFixed(2);
+  document.getElementById('ageDeltaBadge').textContent = 'Δ ' + dText;
+
+  // Telemetry
+  document.getElementById('tEarth').textContent = formatTime(tEarth);
+  document.getElementById('tTraveler').textContent = formatTime(tTrav);
+  document.getElementById('gammaVal').textContent = formatGamma(gamma);
+  document.getElementById('lengthVal').textContent = (lengthContract * 100 < 0.0001)
+    ? (lengthContract * 100).toExponential(3) + '%'
+    : (lengthContract * 100).toFixed(6) + '%';
+  const kmPerSec = v * 299792.458;
+  document.getElementById('speedKms').textContent = kmPerSec >= 1e6
+    ? (kmPerSec / 1e6).toFixed(3) + 'M'
+    : Math.round(kmPerSec).toLocaleString();
+  document.getElementById('ageDiff').textContent = formatAge(ageDiff);
+
+  // --- Verdict ---
+  const destSelect = document.getElementById('destInput');
+  const destName = destSelect.options[destSelect.selectedIndex].text.split('(')[0].trim();
+  let verdict = '', alertClass = 'alert-normal', alertIcon = '🟢', alertMsg = '';
+
+  if (gamma < 1.001) {
+    verdict = `At just <span class="blue">${(v * 100).toFixed(4)}%</span> of c, time dilation is virtually undetectable. The twins reunite nearly the same age — only <span class="highlight">${ageDiff.toExponential(2)} years</span> apart, measurable only with atomic clocks.`;
+    alertIcon = '🟢'; alertClass = 'alert-normal';
+    alertMsg = 'Sub-relativistic regime — effects are below human perception threshold.';
+  } else if (gamma < 1.5) {
+    verdict = `At <span class="blue">${(v * 100).toFixed(3)}% c</span> with γ = <span class="highlight">${formatGamma(gamma)}</span>, the space twin ages noticeably slower. After the round trip to ${destName}, they return <span class="highlight">${formatAge(ageDiff)} years younger</span>.`;
+    alertIcon = '🟡'; alertClass = 'alert-warning';
+    alertMsg = 'Mild dilation — relativistic effects are measurable and real.';
+  } else if (gamma < 10) {
+    verdict = `Significant time dilation. With γ = <span class="highlight">${formatGamma(gamma)}</span>, the space twin experiences only <span class="violet">${formatTime(tTrav)}</span> of travel while <span class="blue">${formatTime(tEarth)}</span> passes on Earth. They return <span class="highlight">${formatAge(ageDiff)} years younger</span>.`;
+    alertIcon = '🟠'; alertClass = 'alert-warning';
+    alertMsg = 'High dilation — the twin paradox is dramatically visible.';
+  } else if (gamma < 1000) {
+    verdict = `<strong>Extreme dilation.</strong> For every year the traveler experiences, <span class="blue">${formatGamma(gamma)} years</span> pass on Earth. The space twin ages only <span class="violet">${formatTime(tTrav)}</span> on this mission while <span class="blue">${formatTime(tEarth)}</span> pass at home.`;
+    alertIcon = '🔴'; alertClass = 'alert-extreme';
+    alertMsg = 'Extreme dilation — the traveler returns to a dramatically different Earth.';
+  } else if (gamma < 1e9) {
+    verdict = `<strong>Cosmic dilation.</strong> γ = <span class="highlight">${formatGamma(gamma)}</span>. The space twin ages <span class="violet">${formatTime(tTrav)}</span> while <span class="blue">${formatTime(tEarth)}</span> unfold on Earth. Upon return, civilizations will have risen and fallen. The world is gone.`;
+    alertIcon = '🟣'; alertClass = 'alert-cosmic';
+    alertMsg = 'Cosmic-scale dilation — universe-spanning travel within a human lifetime.';
+  } else {
+    verdict = `<strong>Godmode.</strong> γ = <span class="highlight">${formatGamma(gamma)}</span>. Time has nearly <em>stopped</em> for the traveler. A journey of <span class="blue">${formatTime(tEarth)}</span> Earth-time compresses to <span class="violet">${formatTime(tTrav)}</span>. The space twin is <span class="highlight">${formatAge(ageDiff)}</span> years younger — an incomprehensible gulf. The Sun has died. Earth is unrecognizable. There is no home to return to.`;
+    alertIcon = '♾️'; alertClass = 'alert-godmode';
+    alertMsg = 'GODMODE — time has effectively stopped. The universe crossable in a fraction of a lifetime.';
+  }
+
+  document.getElementById('finalVerdict').innerHTML = verdict;
+  const alertBar = document.getElementById('alertBar');
+  alertBar.className = `alert-bar ${alertClass}`;
+  alertBar.innerHTML = `<span>${alertIcon}</span> <span>${alertMsg}</span>`;
+
+  // Verdict glow
+  const glow = document.getElementById('verdictGlow');
+  if (gamma > 1e6) glow.style.background = '#d946ef';
+  else if (gamma > 100) glow.style.background = '#f472b6';
+  else if (gamma > 2) glow.style.background = '#a855f7';
+  else glow.style.background = '#0ea5e9';
+
+  // Preset highlight — match by mode+value with tolerance
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    const mode = btn.dataset.mode;
+    const val = parseFloat(btn.dataset.val);
+    let matches = false;
+    if (mode === 'v') {
+      const targetEps = 1 - val;
+      matches = Math.abs((state.epsilon - targetEps) / Math.max(targetEps, 1e-30)) < 0.001;
+    } else if (mode === 'gamma') {
+      matches = Math.abs((gamma - val) / val) < 0.01;
+    }
+    btn.classList.toggle('active', matches);
+  });
+
+  // Spacetime
+  drawSpacetime(eps, gamma);
+}
+
+/* ================================================================
+   EVENT WIRING
+   ================================================================ */
+const vSlider = document.getElementById('vSlider');
+const vManual = document.getElementById('vManual');
+const gammaManual = document.getElementById('gammaManual');
+const destInput = document.getElementById('destInput');
+const ageInput = document.getElementById('ageInput');
+const warpTrack = document.getElementById('warpTrack');
+
+// Slider → logarithmic gamma
+function applySliderPosition(pos) {
+  pos = Math.max(0, Math.min(1, pos));
+  if (state.logMode) {
+    // log-map: 0 → γ=1; 1 → γ=10^12
+    const logG = pos * 12;
+    const g = Math.pow(10, logG);
+    state.epsilon = epsilonFromGamma(g);
+  } else {
+    const v = pos * 0.9999999999 + 1e-10;
+    state.epsilon = 1 - v;
+  }
+  update();
+}
+
+vSlider.addEventListener('input', () => {
+  applySliderPosition(parseFloat(vSlider.value));
+});
+
+warpTrack.addEventListener('click', (e) => {
+  if (e.target === vSlider) return; // let native handle
+  const rect = warpTrack.getBoundingClientRect();
+  const pos = (e.clientX - rect.left) / rect.width;
+  applySliderPosition(pos);
+});
+
+// Manual velocity input
+vManual.addEventListener('input', () => {
+  let v = parseFloat(vManual.value);
+  if (isFinite(v)) {
+    v = Math.max(0, Math.min(0.999999999999999, v));
+    state.epsilon = 1 - v;
+    update();
+  }
+});
+
+// Manual gamma input — the killer feature
+gammaManual.addEventListener('input', () => {
+  let g = parseFloat(gammaManual.value);
+  if (isFinite(g) && g >= 1) {
+    g = Math.min(g, 1e25);  // safety cap
+    state.epsilon = epsilonFromGamma(g);
+    update();
+  }
+});
+
+// Destination
+destInput.addEventListener('change', () => {
+  state.dist = parseFloat(destInput.value);
+  document.getElementById('destInfo').textContent = destMeta[destInput.value] || 'A distant destination across the cosmos.';
+  update();
+});
+
+// Age
+ageInput.addEventListener('input', () => {
+  const a = parseFloat(ageInput.value);
+  if (isFinite(a)) { state.startAge = Math.max(1, Math.min(999, a)); update(); }
+});
+
+// Presets
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mode = btn.dataset.mode;
+    const val = parseFloat(btn.dataset.val);
+    if (mode === 'v') state.epsilon = 1 - val;
+    else if (mode === 'gamma') state.epsilon = epsilonFromGamma(val);
+    update();
+  });
+});
+
+// Warp markers
+document.querySelectorAll('.warp-marker').forEach(m => {
+  m.addEventListener('click', () => {
+    const mode = m.dataset.mode;
+    const val = parseFloat(m.dataset.val);
+    if (mode === 'v') state.epsilon = 1 - val;
+    else if (mode === 'gamma') state.epsilon = epsilonFromGamma(val);
+    update();
+  });
+});
+
+// Accordion
+document.querySelectorAll('.accordion-header').forEach(h => {
+  h.addEventListener('click', () => {
+    const item = h.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// Touch on warp track
+warpTrack.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const rect = warpTrack.getBoundingClientRect();
+  const pos = (touch.clientX - rect.left) / rect.width;
+  applySliderPosition(pos);
+}, { passive: false });
+
+// Init
+loadHistory();
+// Set starting destInfo
+document.getElementById('destInfo').textContent = destMeta[destInput.value] || '';
+update();
+</script>
+</body>
+</html>
